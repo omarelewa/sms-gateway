@@ -1,13 +1,44 @@
-// Import the top-level function of express
 const express = require('express');
-// Creates an Express application using the top-level function
 const app = express();
-// Define port number as 3000
-const port = 3000;
-// Routes HTTP GET requests to the specified path "/" with the specified callback function
-app.get('/', function(request, response) { response.send('Hello, World!');
+const bodyParser = require('body-parser');
+const mysql = require('mysql');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+// default route
+app.get('/', function (req,
+                       res)
+{
+    return res.send({ error: true, message: 'hello' })
 });
-// Make the app listen on port 3000
-app.listen(port, function() {
-    console.log('Server listening on http://localhost:' + port);
+
+const dbConn = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'smsQ'
 });
+// connect to database
+dbConn.connect();
+
+app.get('/read_all_messages', function (req,
+                               res) {
+    dbConn.query('SELECT * FROM sms_table',
+        function (error, results, fields) {
+        //if (error) throw error;
+        return res.send(
+            { error: false,
+                data: results,
+                message: 'users list.'
+            });
+    });
+});
+
+// set port
+app.listen(3000, function () {
+    console.log('Node app is running on port 3000');
+});
+
+module.exports = app;
