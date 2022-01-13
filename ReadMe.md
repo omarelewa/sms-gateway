@@ -12,6 +12,14 @@
 - Install mysql
 - install body-parser
 
+#### API Implementation
+
+##### sendSMS(phone, message_body)
+
+##### getSMS()
+
+##### smsSent(msg_id)
+
 ### MySQL Database 
 
 ```SQL
